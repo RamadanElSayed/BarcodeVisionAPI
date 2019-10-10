@@ -3,6 +3,8 @@ package com.journaldev.barcodevisionapi;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -32,12 +34,15 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     Button btnAction;
     String intentData = "";
     boolean isEmail = false;
-
+    private AudioPlayer mAudioPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_barcode);
+        mAudioPlayer=new AudioPlayer(this);
+
+       // mAudioPlayer.playProgressTone();
 
         initViews();
     }
@@ -115,6 +120,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
+                mAudioPlayer.playRingtone();
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
 
@@ -135,7 +141,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                                 btnAction.setText("LAUNCH URL");
                                 intentData = barcodes.valueAt(0).displayValue;
                                 txtBarcodeValue.setText(intentData);
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
+                                mAudioPlayer.stopRingtone();
 
                             }
                         }
@@ -146,11 +152,33 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         });
     }
 
+    public void playBeep() {
+        MediaPlayer m = new MediaPlayer();
+        try {
+            if (m.isPlaying()) {
+                m.stop();
+                m.release();
+                m = new MediaPlayer();
+            }
+
+            AssetFileDescriptor descriptor = getAssets().openFd("beep.mp3");
+            m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+            descriptor.close();
+
+            m.prepare();
+            m.setVolume(1f, 1f);
+            m.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     protected void onPause() {
         super.onPause();
         cameraSource.release();
+        mAudioPlayer.stopRingtone();
     }
 
     @Override
