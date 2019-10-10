@@ -53,8 +53,7 @@
         android:fontFamily="sans-serif-medium"
         android:text="@string/take_barcode_picture"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
-        tools:ignore="UnusedAttribute" />
+        android:textSize="18sp" />
     <Button
         android:id="@+id/btnScanBarcode"
         android:layout_width="wrap_content"

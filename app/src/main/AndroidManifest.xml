@@ -24,18 +24,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".PictureBarcodeActivity" />
-        <activity android:name=".ScannedBarcodeActivity" />
+        <activity android:name=".PictureBarcodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".ScannedBarcodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".EmailActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
